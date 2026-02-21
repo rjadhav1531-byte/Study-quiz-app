@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Quiz Maker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <h1>Study Quiz Maker</h1>
+      <p>Choose how you want to practice and start learning faster.</p>
+    </header>
+
+    <section class="card start-page" id="startPage">
+      <h2>Start Practice</h2>
+      <p class="muted">Select one mode to continue.</p>
+      <div class="controls">
+        <button id="goQuizBtn" class="btn primary">1. Generate Quiz</button>
+        <button id="goTopicBtn" class="btn">2. Topic-wise MCQ</button>
+        <button id="goNotesBtn" class="btn">3. Notes Organizer</button>
+      </div>
+    </section>
+
+    <section id="quizPage" class="hidden">
+      <section class="card upload-card">
+        <div class="quiz-head">
+          <h2>Generate Quiz</h2>
+          <div class="head-actions">
+            <button id="backToStartFromQuizBtn" class="btn">Back</button>
+          </div>
+        </div>
+
+        <label for="fileInput" class="label">Choose PDF or image</label>
+        <input id="fileInput" type="file" accept=".pdf,image/*" />
+        <label for="difficultySelect" class="label">Difficulty Level</label>
+        <select id="difficultySelect" class="difficulty-select">
+          <option value="beginner">Beginner</option>
+          <option value="intermediate" selected>Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+        <div class="controls">
+          <button id="extractBtn" class="btn primary" disabled>Extract Text</button>
+          <button id="generateBtn" class="btn" disabled>Generate Quiz</button>
+        </div>
+        <p id="status" class="status">Select a file to begin.</p>
+        <textarea id="textOutput" rows="8" placeholder="Extracted text will appear here..."></textarea>
+      </section>
+
+      <section class="card" id="quizSection">
+        <div class="quiz-head">
+          <h2>Quiz</h2>
+          <div class="head-actions">
+            <button id="historyBtn" class="btn">History</button>
+            <button id="restartBtn" class="btn" hidden>Try Again</button>
+          </div>
+        </div>
+        <div id="quizContainer" class="quiz-container">
+          <p class="muted">No quiz yet. Upload notes and click Generate Quiz.</p>
+        </div>
+      </section>
+    </section>
+
+    <section id="topicPage" class="hidden">
+      <section class="card">
+        <div class="quiz-head">
+          <h2>Topic-wise MCQ</h2>
+          <div class="head-actions">
+            <button id="backToStartFromTopicBtn" class="btn">Back</button>
+          </div>
+        </div>
+        <label for="topicInput" class="label">Enter Topic</label>
+        <input id="topicInput" class="difficulty-select" type="text"/>
+        <label for="topicDifficultySelect" class="label">Difficulty Level</label>
+        <select id="topicDifficultySelect" class="difficulty-select">
+          <option value="beginner">Beginner</option>
+          <option value="intermediate" selected>Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+        <div class="controls">
+          <button id="generateTopicBtn" class="btn primary">Generate Topic MCQ</button>
+        </div>
+        <p id="topicStatus" class="status">Choose a topic and difficulty to generate MCQs.</p>
+      </section>
+
+      <section class="card">
+        <div id="topicQuizContainer" class="quiz-container">
+          <p class="muted">Select a topic and generate MCQs.</p>
+        </div>
+      </section>
+    </section>
+
+    <section id="notesPage" class="hidden">
+      <section class="card">
+        <div class="quiz-head">
+          <h2>Notes Organizer</h2>
+          <div class="head-actions">
+            <button id="backToStartFromNotesBtn" class="btn">Back</button>
+          </div>
+        </div>
+
+        <label for="notesFileInput" class="label">Upload Notes (PDF or Image)</label>
+        <input id="notesFileInput" type="file" accept=".pdf,image/*" />
+        <div class="controls">
+          <button id="saveNoteBtn" class="btn primary" disabled>Save Note</button>
+        </div>
+        <p id="notesStatus" class="status">Select a PDF or image to save in your organizer.</p>
+      </section>
+
+      <section class="card">
+        <div class="quiz-head">
+          <h2>Saved Notes</h2>
+        </div>
+        <div id="notesListContainer" class="quiz-container">
+          <p class="muted">No saved notes yet.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
