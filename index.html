@@ -36,8 +36,12 @@
           </div>
         </div>
 
-        <label for="fileInput" class="label">Choose PDF or image</label>
-        <input id="fileInput" type="file" accept=".pdf,image/*" />
+        <label class="label">Choose PDF or image</label>
+        <div class="file-picker">
+          <button id="chooseFileBtn" type="button" class="btn">Choose File</button>
+          <span id="fileName" class="file-name">No file selected</span>
+        </div>
+        <input id="fileInput" class="visually-hidden" type="file" accept="application/pdf,.pdf,image/*" />
         <label for="difficultySelect" class="label">Difficulty Level</label>
         <select id="difficultySelect" class="difficulty-select">
           <option value="beginner">Beginner</option>
@@ -104,8 +108,12 @@
           </div>
         </div>
 
-        <label for="notesFileInput" class="label">Upload Notes (PDF or Image)</label>
-        <input id="notesFileInput" type="file" accept=".pdf,image/*" />
+        <label class="label">Upload Notes (PDF or Image)</label>
+        <div class="file-picker">
+          <button id="chooseNotesFileBtn" type="button" class="btn">Choose File</button>
+          <span id="notesFileName" class="file-name">No file selected</span>
+        </div>
+        <input id="notesFileInput" class="visually-hidden" type="file" accept="application/pdf,.pdf,image/*" />
         <div class="controls">
           <button id="saveNoteBtn" class="btn primary" disabled>Save Note</button>
         </div>
