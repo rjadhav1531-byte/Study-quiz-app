@@ -1,3 +1,4 @@
+
 import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.min.mjs";
 
 const startPage = document.getElementById("startPage");
@@ -12,6 +13,8 @@ const backToStartFromTopicBtn = document.getElementById("backToStartFromTopicBtn
 const backToStartFromNotesBtn = document.getElementById("backToStartFromNotesBtn");
 
 const fileInput = document.getElementById("fileInput");
+const chooseFileBtn = document.getElementById("chooseFileBtn");
+const fileNameEl = document.getElementById("fileName");
 const extractBtn = document.getElementById("extractBtn");
 const generateBtn = document.getElementById("generateBtn");
 const difficultySelect = document.getElementById("difficultySelect");
@@ -28,6 +31,8 @@ const topicStatusEl = document.getElementById("topicStatus");
 const topicQuizContainer = document.getElementById("topicQuizContainer");
 const notesPage = document.getElementById("notesPage");
 const notesFileInput = document.getElementById("notesFileInput");
+const chooseNotesFileBtn = document.getElementById("chooseNotesFileBtn");
+const notesFileNameEl = document.getElementById("notesFileName");
 const saveNoteBtn = document.getElementById("saveNoteBtn");
 const notesStatusEl = document.getElementById("notesStatus");
 const notesListContainer = document.getElementById("notesListContainer");
@@ -139,12 +144,14 @@ fileInput.addEventListener("change", () => {
   activeFile = fileInput.files[0] || null;
 
   if (!activeFile) {
+    fileNameEl.textContent = "No file selected";
     extractBtn.disabled = true;
     generateBtn.disabled = true;
     setStatus("Select a file to begin.");
     return;
   }
 
+  fileNameEl.textContent = activeFile.name;
   extractBtn.disabled = false;
   generateBtn.disabled = true;
   setStatus(`Selected: ${activeFile.name}`);
@@ -231,6 +238,7 @@ generateTopicBtn.addEventListener("click", () => {
 notesFileInput.addEventListener("change", () => {
   const file = notesFileInput.files[0] || null;
   if (!file) {
+    notesFileNameEl.textContent = "No file selected";
     selectedNoteFile = null;
     saveNoteBtn.disabled = true;
     setNotesStatus("Select a PDF or image to save in your organizer.");
@@ -240,6 +248,7 @@ notesFileInput.addEventListener("change", () => {
   const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
   const isImage = file.type.startsWith("image/");
   if (!isPdf && !isImage) {
+    notesFileNameEl.textContent = "No file selected";
     selectedNoteFile = null;
     saveNoteBtn.disabled = true;
     setNotesStatus("Only PDF or image files are supported.");
@@ -247,6 +256,7 @@ notesFileInput.addEventListener("change", () => {
   }
 
   selectedNoteFile = file;
+  notesFileNameEl.textContent = file.name;
   saveNoteBtn.disabled = false;
   setNotesStatus(`Ready to save: ${file.name}`);
 });
@@ -269,6 +279,7 @@ saveNoteBtn.addEventListener("click", async () => {
     localStorage.setItem(NOTES_KEY, JSON.stringify(notes.slice(0, 50)));
     selectedNoteFile = null;
     notesFileInput.value = "";
+    notesFileNameEl.textContent = "No file selected";
     saveNoteBtn.disabled = true;
     renderNotesList();
     setNotesStatus("Note saved successfully.");
@@ -685,14 +696,31 @@ function returnToStartPage() {
   topicQuestions = [];
   topicSelectedAnswers = [];
   selectedNoteFile = null;
+  activeFile = null;
   restartBtn.hidden = true;
   quizContainer.innerHTML = '<p class="muted">No quiz yet. Upload notes and click Generate Quiz.</p>';
   topicQuizContainer.innerHTML = '<p class="muted">Select a topic and generate MCQs.</p>';
+  fileInput.value = "";
   notesFileInput.value = "";
+  fileNameEl.textContent = "No file selected";
+  notesFileNameEl.textContent = "No file selected";
+  extractBtn.disabled = true;
+  generateBtn.disabled = true;
   saveNoteBtn.disabled = true;
   showView("start");
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
+bindFilePickerButton(
+  chooseFileBtn,
+  fileInput,
+  () => setStatus("Cannot open file chooser in this app. Enable file upload in your app wrapper.")
+);
+bindFilePickerButton(
+  chooseNotesFileBtn,
+  notesFileInput,
+  () => setNotesStatus("Cannot open file chooser in this app. Enable file upload in your app wrapper.")
+);
 
 function getSavedNotes() {
   try {
@@ -778,6 +806,17 @@ function readFileAsDataUrl(file) {
     reader.onload = () => resolve(reader.result);
     reader.onerror = () => reject(new Error("File read failed."));
     reader.readAsDataURL(file);
+  });
+}
+
+function bindFilePickerButton(button, input, onBlocked) {
+  button.addEventListener("click", () => {
+    input.value = "";
+    try {
+      input.click();
+    } catch {
+      onBlocked();
+    }
   });
 }
 
