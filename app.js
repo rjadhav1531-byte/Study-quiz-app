@@ -1,4 +1,3 @@
-
 import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.min.mjs";
 
 const startPage = document.getElementById("startPage");
